@@ -2,6 +2,8 @@
 using namespace std;
 
 int main(){
-    cout << "test";
+    cout << "MENU: " << endl; 
+    cout << "1. Input Karyawan " << endl;
+    cout << "2. Outpur Karyawan " << endl;
     
 }
