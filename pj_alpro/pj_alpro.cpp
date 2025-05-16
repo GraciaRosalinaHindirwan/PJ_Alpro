@@ -6,32 +6,104 @@ using namespace std;
 
 struct karyawan
 {
-    char nama, jabatan, gaji;
-    int NIP;
+    char nama[50], jabatan[50];
+    int NIP, gaji;
+    karyawan *kanan, *kiri;
 };
-karyawan kry[1000];
 
+karyawan *awal, *akhir, *bantu, *hapus, *NB, *list;
 
-void input(){
+void buatlistbaru()
+{
+    list = NULL;
+    awal = list;
+    akhir = list;
+}
+
+int listkosong()
+{
+    if (awal == NULL)
+        return (1);
+    else
+        return (false);
+}
+
+void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBaru) {
+    NB = new karyawan;
+    NB->NIP = NIPBaru;
+    NB->gaji = gajiBaru;
+    strcpy(NB->nama, namaBaru);
+    strcpy(NB->jabatan, jabatanBaru);
+    NB->kanan = NULL;
+    NB->kiri = NULL;
+
+    if (listkosong()) {
+        awal = akhir = NB;
+    } else if (NIPBaru <= awal->NIP) { // Sisip di depan
+        NB->kanan = awal;
+        awal->kiri = NB;
+        awal = NB;
+    } else {
+        bantu = awal;
+        while (bantu->kanan != NULL && NIPBaru > bantu->kanan->NIP)
+            bantu = bantu->kanan;
+
+        NB->kanan = bantu->kanan; // Sisip di tengah/akhir
+        if (bantu->kanan != NULL) {
+            bantu->kanan->kiri = NB;
+        }
+        NB->kiri = bantu;
+        bantu->kanan = NB;
+
+        if (NIPBaru > akhir->NIP)
+            akhir = NB;
+    }
+}
+
+void input() {
     int data;
+    char nama[50], jabatan[50];
+    int NIP, gaji;
+
     system("cls");
     cout << " ========================" << endl;
     cout << " | >> Input Karyawan >> |" << endl;
     cout << " ========================" << endl;
-    cout << " Ingin Masukkan berapa data? "; cin >> data;
-    system("pause");
-    
-    for (int i = 0; i < data; i++)
-    {
-        cout << "Data ke-" << i+1 << endl;
+    cout << " Ingin Masukkan berapa data? ";
+    cin >> data;
+    cin.ignore(); 
+
+    for (int i = 0; i < data; i++) {
+        cout << "\nData ke-" << i + 1 << endl;
+
+        cout << " Masukkan Nama    : ";
+        cin.getline(nama, 50);
+        cout << " Masukkan NIP     : ";
+        cin >> NIP;
+        cin.ignore(); // bersihkan buffer
+
+        cout << " Masukkan Jabatan : ";
+        cin.getline(jabatan, 50);
+        cout << " Masukkan Gaji    : ";
+        cin >> gaji;
         cin.ignore();
-        cout << " Masukkan Nama    :     "; gets(kry[i].nama);
-        cout << " Masukkan NIP     :     "; gets(kry[i].NIP);
-        cout << " Masukkan Jabatan :     "; gets(kry[i].jabatan);
-        cout << " Masukkan Gaji    :     "; cin >> kry[i].gaji;
-        cin.ignore();
-        cout << " ========================" << endl;
+
+        sisipnode(nama, jabatan, NIP, gaji);
     }
+
+    cout << "\nData berhasil disimpan.\n";
+    system("pause");
+}
+
+void bacamaju()
+{
+  bantu=awal;
+  while (bantu!=NULL)
+  {
+	 cout << "NIM : " << bantu->NIP << endl << "Nama : " << bantu->nama;
+	 cout << endl;
+	 bantu=bantu->kanan;
+  }
 }
 
 int main(){
@@ -54,7 +126,7 @@ int main(){
             input();
         } if (menu == 2)
         {
-            
+            bacamaju();
         }
         
         
