@@ -6,6 +6,4 @@ int main(){
     cout << "1. Input Karyawan " << endl;
     cout << "2. Output Karyawan " << endl;
     cout << "exit" << endl;
-
-    
 }
