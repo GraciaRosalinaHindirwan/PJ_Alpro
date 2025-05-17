@@ -129,8 +129,9 @@ int main(){
         cout << "       MENU          " << endl;
         cout << " =================== " << endl; 
         cout << "1. Input Karyawan    " << endl;
-        cout << "2. Output Karyawan   " << endl;
-        cout << "3. EXIT              " << endl;
+        cout << "2. Sorting Karyawan   " << endl;
+        cout << "3. Search Karyawan     " << endl;
+        cout << "4. Delete Karyawan     " << endl;
         cout << " =================== " << endl;
         cout << "Masukkan Menu : "; cin >> menu;
 
@@ -142,7 +143,7 @@ int main(){
             system("cls");
             int pilih;
             cout << "==================" << endl;
-            cout << " Output Data by:  "<< endl;
+            cout << " Sorting Data by:  "<< endl;
             cout << "==================" << endl;
             cout << " 1. Ascending (A-Z)    " << endl;
             cout << " 2. Descending (Z-A)   " << endl;
@@ -161,7 +162,11 @@ int main(){
                 cout << " Data secara Descending " << endl;
                 cout << "=======================" << endl;
                 bacamundur();
+            } else if (pilih == 3)
+            {
+                /* code */
             }
+            
         }
 
         cout << "Kembali ke Menu?(y/n) "; cin >> ulang;
