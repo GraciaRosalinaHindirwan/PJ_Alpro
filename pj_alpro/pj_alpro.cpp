@@ -126,8 +126,26 @@ int main(){
             input();
         } if (menu == 2)
         {
-            bacamaju();
+            system("cls");
+            int pilih;
+            cout << "==================" << endl;
+            cout << "   Tampilan Data  "<< endl;
+            cout << "==================" << endl;
+            cout << "   1. Ascending    " << endl;
+            cout << "   2. Descending   " << endl;
+            cout << "==================" << endl;
+            cout << "Masukkan Pilihan : "; cin >> pilih;
+
+            if (pilih == 1)
+            {
+                bacamaju();
+            } else if (pilih == 2)
+            {
+                /* code */
+            }
         }
+
+        cout << "Kembali ke Menu?(y/n) "; cin >> ulang;
         
         
     } while (ulang == 'y');
