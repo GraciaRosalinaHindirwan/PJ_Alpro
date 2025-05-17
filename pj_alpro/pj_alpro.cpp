@@ -100,9 +100,22 @@ void bacamaju()
   bantu=awal;
   while (bantu!=NULL)
   {
-	 cout << "NIM : " << bantu->NIP << endl << "Nama : " << bantu->nama;
+	 cout << "Nama : " << bantu->nama << endl << "NIP : " << bantu->NIP 
+     << endl << "Jabatan: " << bantu->jabatan << endl << "Gaji: " << bantu->gaji << endl;
 	 cout << endl;
 	 bantu=bantu->kanan;
+  }
+}
+
+void bacamundur()
+{ 
+  bantu=akhir;
+  while (bantu!=NULL)
+  {
+	 cout << "Nama : " << bantu->nama << endl << "NIP : " << bantu->NIP 
+     << endl << "Jabatan: " << bantu->jabatan << endl << "Gaji: " << bantu->gaji << endl;
+	 cout << endl;
+	 bantu=bantu->kiri;
   }
 }
 
@@ -129,19 +142,25 @@ int main(){
             system("cls");
             int pilih;
             cout << "==================" << endl;
-            cout << "   Tampilan Data  "<< endl;
+            cout << " Output Data by:  "<< endl;
             cout << "==================" << endl;
-            cout << "   1. Ascending    " << endl;
-            cout << "   2. Descending   " << endl;
+            cout << " 1. Ascending (A-Z)    " << endl;
+            cout << " 2. Descending (Z-A)   " << endl;
             cout << "==================" << endl;
             cout << "Masukkan Pilihan : "; cin >> pilih;
 
             if (pilih == 1)
             {
+                cout << "=======================" << endl;
+                cout << " Data secara Ascending " << endl;
+                cout << "=======================" << endl;
                 bacamaju();
             } else if (pilih == 2)
             {
-                /* code */
+                cout << "=======================" << endl;
+                cout << " Data secara Descending " << endl;
+                cout << "=======================" << endl;
+                bacamundur();
             }
         }
 
