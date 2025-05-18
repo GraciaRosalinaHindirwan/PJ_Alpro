@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <string.h>
-#include<cstring>
+#include <cstring>
 using namespace std;
 
 struct karyawan
@@ -14,6 +14,10 @@ struct karyawan
 
 karyawan *awal, *akhir, *bantu, *hapus, *NB, *list;
 karyawan kry;
+
+int data, dataBaru = 0;
+
+FILE *management;
 
 void buatlistbaru()
 {
@@ -30,7 +34,9 @@ int listkosong()
         return (false);
 }
 
-void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBaru) {
+void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBaru)
+{
+
     NB = new karyawan;
     NB->NIP = NIPBaru;
     NB->gaji = gajiBaru;
@@ -39,19 +45,25 @@ void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBar
     NB->kanan = NULL;
     NB->kiri = NULL;
 
-    if (listkosong()) {
+    if (listkosong())
+    {
         awal = akhir = NB;
-    } else if (NIPBaru <= awal->NIP) { // Sisip di depan
+    }
+    else if (NIPBaru <= awal->NIP)
+    { // Sisip di depan
         NB->kanan = awal;
         awal->kiri = NB;
         awal = NB;
-    } else {
+    }
+    else
+    {
         bantu = awal;
         while (bantu->kanan != NULL && NIPBaru > bantu->kanan->NIP)
             bantu = bantu->kanan;
 
         NB->kanan = bantu->kanan; // Sisip di tengah/akhir
-        if (bantu->kanan != NULL) {
+        if (bantu->kanan != NULL)
+        {
             bantu->kanan->kiri = NB;
         }
         NB->kiri = bantu;
@@ -62,8 +74,34 @@ void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBar
     }
 }
 
-int data, dataBaru = 0;
-void input() {
+void bacaFile() {
+    management = fopen("karyawan.txt", "r");
+    if (management == NULL) {
+        cout << "[!] File tidak ditemukan atau kosong.\n";
+        return;
+    }
+
+    char nama[50], jabatan[50];
+    int i, NIP, gaji;
+
+    while (fscanf(management, " %[^\n]\n%[^\n]\n%d\n%d\n", nama, jabatan, &NIP, &gaji) != EOF) {
+        sisipnode(nama, jabatan, NIP, gaji);
+        i++;
+    }
+    dataBaru = i;
+    fclose(management);
+}
+
+void input()
+{
+
+    management = fopen("karyawan.txt", "a"); //Mode a agar bisa menambahkan data dan penyimpanan dinamis
+    if (management == NULL)
+    {
+        cout << "Error membuka file!";
+        exit(1);
+    }
+
     char nama[50], jabatan[50];
     int NIP, gaji;
 
@@ -73,9 +111,10 @@ void input() {
     cout << " ========================" << endl;
     cout << " Ingin Masukkan berapa data? ";
     cin >> data;
-    cin.ignore(); 
+    cin.ignore();
 
-    for (int i = 0; i < data; i++) {
+    for (int i = 0; i < data; i++)
+    {
         cout << "\nData ke-" << i + 1 << endl;
 
         cout << " Masukkan Nama    : ";
@@ -91,93 +130,119 @@ void input() {
         cin.ignore();
 
         sisipnode(kry.nama, kry.jabatan, kry.NIP, kry.gaji);
+        fprintf(management, "%s\n%s\n%d\n%d\n", kry.nama, kry.jabatan, kry.NIP, kry.gaji);
     }
 
     dataBaru += data;
 
     cout << "\nData berhasil disimpan.\n";
     system("pause");
+    fclose(management);
 }
 
 void bacamaju()
 {
-  bantu=awal;
-  while (bantu!=NULL)
-  {
-	 cout << "Nama : " << bantu->nama << endl << "NIP : " << bantu->NIP 
-     << endl << "Jabatan: " << bantu->jabatan << endl << "Gaji: " << bantu->gaji << endl;
-	 cout << endl;
-	 bantu=bantu->kanan;
-  }
+    bacaFile();
+    bantu = awal;
+    while (bantu != NULL)
+    {
+        cout << "Nama : " << bantu->nama << endl
+             << "NIP : " << bantu->NIP
+             << endl
+             << "Jabatan: " << bantu->jabatan << endl
+             << "Gaji: " << bantu->gaji << endl;
+        cout << endl;
+        bantu = bantu->kanan;
+    }
 }
 
 void bacamundur()
-{ 
-  bantu=akhir;
-  while (bantu!=NULL)
-  {
-	 cout << "Nama : " << bantu->nama << endl << "NIP : " << bantu->NIP 
-     << endl << "Jabatan: " << bantu->jabatan << endl << "Gaji: " << bantu->gaji << endl;
-	 cout << endl;
-	 bantu=bantu->kiri;
-  }
+{
+    bacaFile();
+    bantu = akhir;
+    while (bantu != NULL)
+    {
+        cout << "Nama : " << bantu->nama << endl
+             << "NIP : " << bantu->NIP
+             << endl
+             << "Jabatan: " << bantu->jabatan << endl
+             << "Gaji: " << bantu->gaji << endl;
+        cout << endl;
+        bantu = bantu->kiri;
+    }
 }
 
-void searchNIP(){
-    bool found;
+void searchNIP()
+{
     system("cls");
+    bacaFile();
     int search;
-    cout << "Masukkan NIP yang akan dicari: "; cin >> search;
-     for (int i = 0; i < dataBaru; i++)
-     {
-        if (search == kry.NIP)
+    bool found = false;
+
+    cout << "Masukkan NIP yang akan dicari: ";
+    cin >> search;
+
+    bantu = awal;
+    while (bantu != NULL)
+    {
+        if (bantu->NIP == search)
         {
+            cout << "Nama : " << bantu->nama << endl;
+            cout << "NIP : " << bantu->NIP << endl;
+            cout << "Jabatan: " << bantu->jabatan << endl;
+            cout << "Gaji: " << bantu->gaji << endl;
+            cout << endl;
             found = true;
-            cout << "   [!] Data dengan NIP " << search << " Ditemukan [!]  " << endl;
-            cout << "=====================================================" << endl;
-            cout << " Masukkan Nama    : " << kry.nama << endl;
-            cout << " Masukkan NIP     : " << kry.NIP << endl;;
-            cout << " Masukkan Jabatan : " << kry.jabatan << endl;;
-            cout << " Masukkan Gaji    : " << kry.gaji << endl;;
-        } 
-
-        if (!found)
-        {
-            cout << "Mohon Maaf," << endl;
-            cout << "[!] Data dengan NIP " << search << " Tidak Ditemukan [!]  " << endl;
+            break; 
         }
-     }  
+        bantu = bantu->kanan;
+    }
+
+    if (!found)
+    {
+        cout << "[!] Data dengan NIP " << search << " Tidak Ditemukan [!]" << endl;
+    }
+
+    system("pause");
 }
 
-void searchNama(){
-    bool found;
+
+void searchNama()
+{
     system("cls");
-    int search;
     char searchName[50];
-    cout << "Masukkan nama yang akan dicari: "; cin >> searchName;
-     for (int i = 0; i < dataBaru; i++)
-     {
-        if (strcmp(searchName, kry.nama) == 0)
+    bool found = false;
+
+    cout << "Masukkan nama yang akan dicari: ";
+    cin.ignore(); 
+    cin.getline(searchName, sizeof(searchName));
+
+    bantu = awal;
+    while (bantu != NULL)
+    {
+        if (strcmp(bantu->nama, searchName) == 0)
         {
+            cout << "Nama : " << bantu->nama << endl;
+            cout << "NIP : " << bantu->NIP << endl;
+            cout << "Jabatan: " << bantu->jabatan << endl;
+            cout << "Gaji: " << bantu->gaji << endl;
+            cout << endl;
             found = true;
-            cout << "   [!] Data dengan Nama " << searchName << " Ditemukan [!]  " << endl;
-            cout << "=====================================================" << endl;
-            cout << " Masukkan Nama    : " << kry.nama << endl;
-            cout << " Masukkan NIP     : " << kry.NIP << endl;;
-            cout << " Masukkan Jabatan : " << kry.jabatan << endl;;
-            cout << " Masukkan Gaji    : " << kry.gaji << endl;;
-        } 
-
-        if (!found)
-        {
-            cout << "Mohon Maaf," << endl;
-            cout << "[!] Data dengan Nama " << searchName << " Tidak Ditemukan [!]  " << endl;
         }
-     }  
+        bantu = bantu->kanan;
+    }
 
+    if (!found)
+    {
+        cout << "[!] Data dengan Nama " << searchName << " Tidak Ditemukan [!]" << endl;
+    }
+
+    system("pause");
 }
 
-int main(){
+
+int main()
+{
     int menu;
     char ulang = 'y';
     int pilih;
@@ -186,27 +251,30 @@ int main(){
     {
         cout << " =================== " << endl;
         cout << "       MENU          " << endl;
-        cout << " =================== " << endl; 
+        cout << " =================== " << endl;
         cout << "1. Input Karyawan    " << endl;
         cout << "2. Sorting Karyawan   " << endl;
         cout << "3. Search Karyawan     " << endl;
         cout << "4. Delete Karyawan     " << endl;
         cout << " =================== " << endl;
-        cout << "Masukkan Menu : "; cin >> menu;
+        cout << "Masukkan Menu : ";
+        cin >> menu;
 
         if (menu == 1)
         {
             input();
-        } if (menu == 2)
+        }
+        if (menu == 2)
         {
             system("cls");
+            cout << "===================" << endl;
+            cout << " Sort Data by NIP :  " << endl;
+            cout << "===================" << endl;
+            cout << " 1. Ascending     " << endl;
+            cout << " 2. Descending    " << endl;
             cout << "==================" << endl;
-            cout << " Sorting Data by:  "<< endl;
-            cout << "==================" << endl;
-            cout << " 1. Ascending (A-Z)    " << endl;
-            cout << " 2. Descending (Z-A)   " << endl;
-            cout << "==================" << endl;
-            cout << "Masukkan Pilihan : "; cin >> pilih;
+            cout << "Masukkan Pilihan : ";
+            cin >> pilih;
 
             if (pilih == 1)
             {
@@ -214,37 +282,38 @@ int main(){
                 cout << " Data secara Ascending " << endl;
                 cout << "=======================" << endl;
                 bacamaju();
-            } if (pilih == 2)
+            }
+            if (pilih == 2)
             {
                 cout << "=======================" << endl;
                 cout << " Data secara Descending " << endl;
                 cout << "=======================" << endl;
                 bacamundur();
             }
-        } if (menu == 3)
+        }
+        if (menu == 3)
         {
             cout << "==================" << endl;
-            cout << " Searching Data by:  "<< endl;
+            cout << " Searching Data by:  " << endl;
             cout << "==================" << endl;
             cout << " 1. Nama    " << endl;
             cout << " 2. NIP   " << endl;
             cout << "=======================" << endl;
-            cout << "Masukkan Pilihan : "; cin >> pilih;
+            cout << "Masukkan Pilihan : ";
+            cin >> pilih;
 
             if (pilih == 1)
             {
                 searchNama();
-            } if (pilih == 2)
+            }
+            if (pilih == 2)
             {
                 searchNIP();
             }
-            
-            
         }
-        
 
-        cout << "Kembali ke Menu?(y/n) "; cin >> ulang;
-        
+        cout << "Kembali ke Menu?(y/n) ";
+        cin >> ulang;
+
     } while (ulang == 'y');
-        } 
-    
+}
