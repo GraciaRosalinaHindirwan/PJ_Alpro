@@ -292,6 +292,45 @@ void hapusnode(char namaHapus[50]) {
     kirimfile();
 }
 
+
+ void editData(){
+    int indexEdit;
+    cout << "Edit karyawan nomor berapa? (1-" << dataBaru << ") = ";
+    cin >> indexEdit;
+    cin.ignore();
+
+
+    // Navigasi ke node ke-indexEdit
+    bantu = awal;
+    for (int i = 1; i < indexEdit; i++) {
+        bantu = bantu->kanan;
+    }
+
+    cout << "Data lama:\n";
+    cout << "Nama    : " << bantu->nama << endl;
+    cout << "NIP     : " << bantu->NIP << endl;
+    cout << "Jabatan : " << bantu->jabatan << endl;
+    cout << "Gaji    : " << bantu->gaji << endl << endl;
+
+    cout << "Masukkan data baru:\n";
+    cout << "Nama    : ";
+    cin.getline(bantu->nama, sizeof(bantu->nama));
+    cout << "NIP     : ";
+    cin >> bantu->NIP;
+    cin.ignore();
+    cout << "Jabatan : ";
+    cin.getline(bantu->jabatan, sizeof(bantu->jabatan));
+    cout << "Gaji    : ";
+    cin >> bantu->gaji;
+    cin.ignore();
+
+    kirimfile();  // overwrite file dengan data terbaru dari linked list
+
+    cout << "\nData berhasil diedit.\n";
+    system("pause");
+}
+    
+
 int main()
 {   
     // buatlistbaru();
@@ -306,9 +345,11 @@ int main()
         cout << "       MENU          " << endl;
         cout << " =================== " << endl;
         cout << "1. Input Karyawan    " << endl;
-        cout << "2. Sorting Karyawan   " << endl;
-        cout << "3. Search Karyawan     " << endl;
-        cout << "4. Delete Karyawan     " << endl;
+        cout << "2. Output Karyawan   " << endl;
+        cout << "3. Sorting Karyawan   " << endl;
+        cout << "4. Search Karyawan     " << endl;
+        cout << "5. Delete Karyawan     " << endl;
+        cout << "6. Edit Karyawan       " << endl;
         cout << " =================== " << endl;
         cout << "Masukkan Menu : ";
         cin >> menu;
@@ -322,10 +363,10 @@ int main()
         case 2:
             system("cls");
             cout << "===================" << endl;
-            cout << " Sort Data by NIP :  " << endl;
+            cout << " Output Data by NIP :  " << endl;
             cout << "===================" << endl;
-            cout << " 1. Ascending     " << endl;
-            cout << " 2. Descending    " << endl;
+            cout << " 1. Ascending (Z-A)     " << endl;
+            cout << " 2. Descending (A-Z)   " << endl;
             cout << "==================" << endl;
             cout << "Masukkan Pilihan : ";
             cin >> pilih;
@@ -350,7 +391,7 @@ int main()
             }
         break;
         
-        case 3:
+        case 4:
         cout << "==================" << endl;
             cout << " Searching Data by:  " << endl;
             cout << "==================" << endl;
@@ -372,7 +413,7 @@ int main()
                 break;
             }
         break;
-        case 4:
+        case 5:
         char namaHapus [50];
             cout << "==================" << endl;
             cout << " Delete Data by:  " << endl;
@@ -381,7 +422,8 @@ int main()
             cout << "Masukkan nama yang ingin dihapus = "; cin.getline(namaHapus, sizeof(namaHapus));
             hapusnode(namaHapus);
         break;
-        
+        case 6: 
+            editData();
         default:
             break;
         }
