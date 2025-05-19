@@ -82,7 +82,7 @@ void bacaFile() {
     }
 
     char nama[50], jabatan[50];
-    int i, NIP, gaji;
+    int i = 0, NIP, gaji;
 
     while (fscanf(management, " %[^\n]\n%[^\n]\n%d\n%d\n", nama, jabatan, &NIP, &gaji) != EOF) {
         sisipnode(nama, jabatan, NIP, gaji);
@@ -142,7 +142,6 @@ void input()
 
 void bacamaju()
 {
-    bacaFile();
     bantu = awal;
     while (bantu != NULL)
     {
@@ -158,7 +157,6 @@ void bacamaju()
 
 void bacamundur()
 {
-    bacaFile();
     bantu = akhir;
     while (bantu != NULL)
     {
@@ -175,7 +173,6 @@ void bacamundur()
 void searchNIP()
 {
     system("cls");
-    bacaFile();
     int search;
     bool found = false;
 
@@ -243,6 +240,7 @@ void searchNama()
 
 int main()
 {
+    bacaFile();
     int menu;
     char ulang = 'y';
     int pilih;
@@ -260,12 +258,12 @@ int main()
         cout << "Masukkan Menu : ";
         cin >> menu;
 
-        if (menu == 1)
+        switch (menu)
         {
+        case 1:
             input();
-        }
-        if (menu == 2)
-        {
+            break;
+        case 2:
             system("cls");
             cout << "===================" << endl;
             cout << " Sort Data by NIP :  " << endl;
@@ -276,24 +274,28 @@ int main()
             cout << "Masukkan Pilihan : ";
             cin >> pilih;
 
-            if (pilih == 1)
+            switch (pilih)
             {
+            case 1:
                 cout << "=======================" << endl;
                 cout << " Data secara Ascending " << endl;
                 cout << "=======================" << endl;
                 bacamaju();
-            }
-            if (pilih == 2)
-            {
-                cout << "=======================" << endl;
+                break;
+            case 2:
+            cout << "=======================" << endl;
                 cout << " Data secara Descending " << endl;
                 cout << "=======================" << endl;
                 bacamundur();
+            break;
+            
+            default:
+                break;
             }
-        }
-        if (menu == 3)
-        {
-            cout << "==================" << endl;
+        break;
+        
+        case 3:
+        cout << "==================" << endl;
             cout << " Searching Data by:  " << endl;
             cout << "==================" << endl;
             cout << " 1. Nama    " << endl;
@@ -302,15 +304,75 @@ int main()
             cout << "Masukkan Pilihan : ";
             cin >> pilih;
 
-            if (pilih == 1)
+            switch (pilih)
             {
+            case 1:
                 searchNama();
+                break;
+            case 2:
+            searchNIP();
+            break;
+            
+            default:
+                break;
             }
-            if (pilih == 2)
-            {
-                searchNIP();
-            }
+        break;
+        
+        default:
+            break;
         }
+
+        // if (menu == 1)
+        // {
+        //     input();
+        // }
+        // if (menu == 2)
+        // {
+        //     system("cls");
+        //     cout << "===================" << endl;
+        //     cout << " Sort Data by NIP :  " << endl;
+        //     cout << "===================" << endl;
+        //     cout << " 1. Ascending     " << endl;
+        //     cout << " 2. Descending    " << endl;
+        //     cout << "==================" << endl;
+        //     cout << "Masukkan Pilihan : ";
+        //     cin >> pilih;
+
+        //     if (pilih == 1)
+        //     {
+        //         cout << "=======================" << endl;
+        //         cout << " Data secara Ascending " << endl;
+        //         cout << "=======================" << endl;
+        //         bacamaju();
+        //     }
+        //     if (pilih == 2)
+        //     {
+        //         cout << "=======================" << endl;
+        //         cout << " Data secara Descending " << endl;
+        //         cout << "=======================" << endl;
+        //         bacamundur();
+        //     }
+        // }
+        // if (menu == 3)
+        // {
+        //     cout << "==================" << endl;
+        //     cout << " Searching Data by:  " << endl;
+        //     cout << "==================" << endl;
+        //     cout << " 1. Nama    " << endl;
+        //     cout << " 2. NIP   " << endl;
+        //     cout << "=======================" << endl;
+        //     cout << "Masukkan Pilihan : ";
+        //     cin >> pilih;
+
+        //     if (pilih == 1)
+        //     {
+        //         searchNama();
+        //     }
+        //     if (pilih == 2)
+        //     {
+        //         searchNIP();
+        //     }
+        // }
 
         cout << "Kembali ke Menu?(y/n) ";
         cin >> ulang;
