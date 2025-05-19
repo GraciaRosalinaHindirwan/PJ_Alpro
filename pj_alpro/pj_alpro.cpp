@@ -424,6 +424,7 @@ int main()
         break;
         case 6: 
             editData();
+            break;
         default:
             break;
         }
