@@ -115,7 +115,7 @@ void input()
 
     for (int i = 0; i < data; i++)
     {
-        cout << "\nData ke-" << i + 1 << endl;
+        cout << "\nData ke-" << dataBaru + 1 << endl;
 
         cout << " Masukkan Nama    : ";
         cin.getline(kry.nama, sizeof(kry.nama));
@@ -237,16 +237,56 @@ void searchNama()
     system("pause");
 }
 
+void hapusnode(char namaHapus[50]) {
+    if (listkosong()) {
+        cout << "List masih kosong"; //cek list kosng 
+    } else if (awal == akhir) {
+        // Hapus jika hanya ada satu node
+        free(awal);
+        cout << "Node dengan info " << namaHapus << " telah dihapus\n";
+        awal = akhir = NULL;
+        cout << "list sudah kosong";
+    } else if (strcmp(awal->nama,namaHapus)== 0) {
+        hapus = awal; // Hapus di awal
+        awal = hapus->kanan;
+        if (awal != NULL) {
+            awal->kiri = NULL;
+        }
+        free(hapus);
+        cout << "Node dengan info " << namaHapus << " telah dihapus\n";
+    } else {
+        bantu = awal;
+        while (bantu->kanan != NULL && namaHapus != bantu->kanan->nama) {
+            bantu = bantu->kanan;
+        }
+        if (bantu->kanan != NULL && namaHapus == bantu->kanan->nama) {
+            hapus = bantu->kanan;
+            if (hapus == akhir) { // Hapus di akhir
+                akhir = bantu;
+                akhir->kanan = NULL;
+            } else { // Hapus di tengah
+                bantu->kanan = hapus->kanan;
+                hapus->kanan->kiri = bantu;
+            }
+            free(hapus);
+            cout << "Node dengan info " << namaHapus << " telah dihapus\n";
+
+        } else {
+            cout << "list tidak di temukan\n";
+        }
+    }
+}
 
 int main()
-{
+{   
+    buatlistbaru();
     bacaFile();
     int menu;
     char ulang = 'y';
     int pilih;
-    system("cls");
     do
     {
+        system("cls");
         cout << " =================== " << endl;
         cout << "       MENU          " << endl;
         cout << " =================== " << endl;
@@ -261,6 +301,7 @@ int main()
         switch (menu)
         {
         case 1:
+
             input();
             break;
         case 2:
@@ -312,10 +353,18 @@ int main()
             case 2:
             searchNIP();
             break;
-            
             default:
                 break;
             }
+        break;
+        case 4:
+        char namaHapus [50];
+            cout << "==================" << endl;
+            cout << " Delete Data by:  " << endl;
+            cout << "==================" << endl;
+            cout << "Masukkan nama yang ingin dihapus = "; cin.getline(namaHapus, sizeof(namaHapus));
+            bacaFile();
+            hapusnode(namaHapus);
         break;
         
         default:
