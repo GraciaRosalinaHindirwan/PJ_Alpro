@@ -92,12 +92,27 @@ void bacaFile() {
     fclose(management);
 }
 
+void kirimfile() {
+    management = fopen("karyawan.txt", "w");
+    if (management == NULL) {
+        cout << "Gagal membuka file untuk menyimpan!\n";
+        return;
+    }
+
+    bantu = awal;
+    while (bantu != NULL) {
+        fprintf(management, "%s\n%s\n%d\n%d\n", bantu->nama, bantu->jabatan, bantu->NIP, bantu->gaji);
+        bantu = bantu->kanan;
+    }
+
+    fclose(management);
+}
+
+
 void input()
 {
-
-    management = fopen("karyawan.txt", "a"); //Mode a agar bisa menambahkan data dan penyimpanan dinamis
-    if (management == NULL)
-    {
+    management = fopen("karyawan.txt", "a"); // Mode append
+    if (management == NULL) {
         cout << "Error membuka file!";
         exit(1);
     }
@@ -113,9 +128,8 @@ void input()
     cin >> data;
     cin.ignore();
 
-    for (int i = 0; i < data; i++)
-    {
-        cout << "\nData ke-" << dataBaru + 1 << endl;
+    for (int i = 0; i < data; i++) {
+        cout << "\nData ke-" << dataBaru + i + 1 << endl;
 
         cout << " Masukkan Nama    : ";
         cin.getline(kry.nama, sizeof(kry.nama));
@@ -133,12 +147,12 @@ void input()
         fprintf(management, "%s\n%s\n%d\n%d\n", kry.nama, kry.jabatan, kry.NIP, kry.gaji);
     }
 
-    dataBaru += data;
-
+    dataBaru = dataBaru + data;
     cout << "\nData berhasil disimpan.\n";
     system("pause");
     fclose(management);
 }
+
 
 void bacamaju()
 {
@@ -256,10 +270,10 @@ void hapusnode(char namaHapus[50]) {
         cout << "Node dengan info " << namaHapus << " telah dihapus\n";
     } else {
         bantu = awal;
-        while (bantu->kanan != NULL && namaHapus != bantu->kanan->nama) {
+        while (bantu->kanan != NULL && strcmp(namaHapus,bantu->kanan->nama) != 0 ) {
             bantu = bantu->kanan;
         }
-        if (bantu->kanan != NULL && namaHapus == bantu->kanan->nama) {
+        if (bantu->kanan != NULL && strcmp(namaHapus,bantu->kanan->nama)  == 0) {
             hapus = bantu->kanan;
             if (hapus == akhir) { // Hapus di akhir
                 akhir = bantu;
@@ -275,11 +289,12 @@ void hapusnode(char namaHapus[50]) {
             cout << "list tidak di temukan\n";
         }
     }
+    kirimfile();
 }
 
 int main()
 {   
-    buatlistbaru();
+    // buatlistbaru();
     bacaFile();
     int menu;
     char ulang = 'y';
@@ -362,8 +377,8 @@ int main()
             cout << "==================" << endl;
             cout << " Delete Data by:  " << endl;
             cout << "==================" << endl;
+            cin.ignore();
             cout << "Masukkan nama yang ingin dihapus = "; cin.getline(namaHapus, sizeof(namaHapus));
-            bacaFile();
             hapusnode(namaHapus);
         break;
         
