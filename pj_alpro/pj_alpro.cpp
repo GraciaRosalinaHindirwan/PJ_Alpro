@@ -136,7 +136,6 @@ void kirimfile() {
     fclose(management);
 }
 
-
 void input()
 {
     management = fopen("karyawan.txt", "a"); // Mode append
@@ -164,7 +163,7 @@ void input()
         cout << " Masukkan NIP     : ";
         cin >> kry.NIP;
         cin.ignore(); // bersihkan buffer
-        
+        cout << "Jabatan hanya (Pemilik, Manager, Supervisor, dan Staff)\n";
         
         
         do {
@@ -242,6 +241,70 @@ void bacamundur()
     }
 }
 
+
+void sortNIP(){
+    if (awal == NULL || awal->kanan == NULL)
+    {
+        cout << "List Kosong atau data hanya satu";
+        system("pause");
+        return;
+    }
+    bool swapped;
+    
+    do
+    {
+        swapped = false;
+        bantu = awal;
+    
+        while (bantu->kanan !=NULL)
+        {
+            if (bantu->NIP > bantu->kanan->NIP)
+            {
+                swap(bantu->nama,   bantu->kanan->nama);
+                swap(bantu->NIP,   bantu->kanan->NIP);
+                swap(bantu->jabatan,   bantu->kanan->jabatan);
+                swap(bantu->jamKerja,   bantu->kanan->jamKerja);
+                swapped = true;
+            }
+            bantu = bantu->kanan;
+        }
+    } while (swapped);
+    cout << "Berhasil diurutkan" << endl;
+    kirimfile();
+    bacamaju();
+    }
+
+    void sortNama(){
+    if (awal == NULL || awal->kanan == NULL)
+    {
+        cout << "List Kosong atau data hanya satu";
+        system("pause");
+        return;
+    }
+    bool swapped;
+    
+    do
+    {
+        swapped = false;
+        bantu = awal;
+    
+        while (bantu->kanan !=NULL)
+        {
+            if (strcmp(bantu->nama,bantu->kanan->nama)>0)
+            {
+                swap(bantu->nama,   bantu->kanan->nama);
+                swap(bantu->NIP,   bantu->kanan->NIP);
+                swap(bantu->jabatan,   bantu->kanan->jabatan);
+                swap(bantu->jamKerja,   bantu->kanan->jamKerja);
+                swapped = true;
+            }
+            bantu = bantu->kanan;
+        }
+    } while (swapped);
+    cout << "Berhasil diurutkan" << endl;
+    kirimfile();
+    bacamaju();
+}
 
 void searchNIP()
 {
@@ -354,9 +417,6 @@ void hapusnode(char namaHapus[50]) {
 
  void editData(){
     int indexEdit;
-
-    
-
     cout << "Edit karyawan nomor berapa? (1-" << dataBaru << ") = ";
     cin >> indexEdit;
     cin.ignore();
@@ -450,10 +510,39 @@ int main()
                 bacamundur();
             break;
             
+            
             default:
                 break;
             }
         break;
+        case 3:
+        cout << "===================" << endl;
+            cout << " Sorting Data by NIP :  " << endl;
+            cout << "===================" << endl;
+            cout << " 1. Sort by NIP     " << endl;
+            cout << " 2. Sort by Name   " << endl;
+            cout << "==================" << endl;
+            cout << "Masukkan Pilihan : ";
+            cin >> pilih;
+
+            switch (pilih)
+            {
+            case 1:
+                cout << "=======================" << endl;
+                cout << "     Sorting by NIP    " << endl;
+                cout << "=======================" << endl;
+                sortNIP();
+                break;
+
+            case 2:
+                cout << "=======================" << endl;
+                cout << "     Sorting by Name   " << endl;
+                cout << "=======================" << endl;
+                sortNama();
+            break;
+           
+}
+break;
         
         case 4:
         cout << "==================" << endl;

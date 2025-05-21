@@ -1,0 +1,12 @@
+bahlil
+staff
+10003
+10
+jokowi
+pemilik
+10001
+0
+parabowo
+staff
+10002
+10
