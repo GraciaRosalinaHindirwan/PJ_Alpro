@@ -12,7 +12,7 @@ struct karyawan
     karyawan *kanan, *kiri;
 };
 
-karyawan *awal, *akhir, *bantu, *hapus, *NB, *list;
+karyawan *awal, *akhir, *bantu, *hapus, *NB, *list; 
 karyawan kry;
 
 int data, dataBaru = 0;
