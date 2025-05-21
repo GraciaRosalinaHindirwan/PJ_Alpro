@@ -8,7 +8,7 @@ using namespace std;
 struct karyawan
 {
     char nama[50], jabatan[50];
-    int NIP, gaji;
+    int NIP, jamKerja;
     karyawan *kanan, *kiri;
 };
 
@@ -16,6 +16,7 @@ karyawan *awal, *akhir, *bantu, *hapus, *NB, *list;
 karyawan kry;
 
 int data, dataBaru = 0;
+int ownerada = 0, adajabatan = 0;
 
 FILE *management;
 
@@ -34,43 +35,70 @@ int listkosong()
         return (false);
 }
 
-void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int gajiBaru)
+int rumusgaji(char jabatan[50], int jamKerja)
 {
+    int gajiperjam = 0, totalGaji;
 
+    if (strcmp(jabatan, "Manager") == 0 || strcmp(jabatan, "manager") == 0)
+    {
+        gajiperjam = 450000;
+    }
+    else if (strcmp(jabatan, "Supervisor") == 0 || strcmp(jabatan, "supervisor") == 0)
+    {
+        gajiperjam = 250000;
+    }
+    else if (strcmp(jabatan, "Staff") == 0 || strcmp(jabatan, "staff") == 0)
+    {
+        gajiperjam = 250000;
+    }
+    else if (strcmp(jabatan, "Pemilik") == 0 || strcmp(jabatan, "pemilik") == 0)
+    {
+        return 0; // Pemilik tidak menerima gaji
+    }
+    return  gajiperjam * jamKerja * 30;
+}
+
+int prioritasJabatan(char jabatan[50]) {
+    if (strcmp(jabatan, "Pemilik") == 0 || strcmp(jabatan, "pemilik") == 0) return 1;
+    if (strcmp(jabatan, "Manager") == 0 || strcmp(jabatan, "manager") == 0) return 2;
+    if (strcmp(jabatan, "Supervisor") == 0 || strcmp(jabatan, "supervisor") == 0) return 3;
+    if (strcmp(jabatan, "Staff") == 0 || strcmp(jabatan, "staff") == 0) return 4;
+    return 99; // default: jabatan tidak dikenali
+}
+
+void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int jamKerjaBaru) {
     NB = new karyawan;
-    NB->NIP = NIPBaru;
-    NB->gaji = gajiBaru;
     strcpy(NB->nama, namaBaru);
     strcpy(NB->jabatan, jabatanBaru);
+    NB->NIP = NIPBaru;
+    NB->jamKerja = jamKerjaBaru;
     NB->kanan = NULL;
     NB->kiri = NULL;
 
-    if (listkosong())
-    {
+    int priorNB = prioritasJabatan(jabatanBaru);
+
+    if (listkosong()) {
         awal = akhir = NB;
-    }
-    else if (NIPBaru <= awal->NIP)
-    { // Sisip di depan
+    } else if (priorNB < prioritasJabatan(awal->jabatan)) {
+        // Sisip di depan
         NB->kanan = awal;
         awal->kiri = NB;
         awal = NB;
-    }
-    else
-    {
+    } else {
         bantu = awal;
-        while (bantu->kanan != NULL && NIPBaru > bantu->kanan->NIP)
+        while (bantu->kanan != NULL && priorNB >= prioritasJabatan(bantu->kanan->jabatan)) {
             bantu = bantu->kanan;
-
-        NB->kanan = bantu->kanan; // Sisip di tengah/akhir
-        if (bantu->kanan != NULL)
-        {
+        }
+        NB->kanan = bantu->kanan;
+        if (bantu->kanan != NULL) {
             bantu->kanan->kiri = NB;
         }
         NB->kiri = bantu;
         bantu->kanan = NB;
 
-        if (NIPBaru > akhir->NIP)
+        if (NB->kanan == NULL) {
             akhir = NB;
+        }
     }
 }
 
@@ -82,10 +110,10 @@ void bacaFile() {
     }
 
     char nama[50], jabatan[50];
-    int i = 0, NIP, gaji;
+    int i = 0, NIP, jamKerja;
 
-    while (fscanf(management, " %[^\n]\n%[^\n]\n%d\n%d\n", nama, jabatan, &NIP, &gaji) != EOF) {
-        sisipnode(nama, jabatan, NIP, gaji);
+    while (fscanf(management, " %[^\n]\n%[^\n]\n%d\n%d\n", nama, jabatan, &NIP, &jamKerja) != EOF) {
+        sisipnode(nama, jabatan, NIP, jamKerja);
         i++;
     }
     dataBaru = i;
@@ -101,7 +129,7 @@ void kirimfile() {
 
     bantu = awal;
     while (bantu != NULL) {
-        fprintf(management, "%s\n%s\n%d\n%d\n", bantu->nama, bantu->jabatan, bantu->NIP, bantu->gaji);
+        fprintf(management, "%s\n%s\n%d\n%d\n", bantu->nama, bantu->jabatan, bantu->NIP, bantu->jamKerja);
         bantu = bantu->kanan;
     }
 
@@ -118,7 +146,7 @@ void input()
     }
 
     char nama[50], jabatan[50];
-    int NIP, gaji;
+    int NIP, jamKerja;
 
     system("cls");
     cout << " ========================" << endl;
@@ -136,15 +164,44 @@ void input()
         cout << " Masukkan NIP     : ";
         cin >> kry.NIP;
         cin.ignore(); // bersihkan buffer
+        
+        
+        
+        do {
+            cout << " Masukkan Jabatan : ";
+            cin.getline(kry.jabatan, sizeof(kry.jabatan));
 
-        cout << " Masukkan Jabatan : ";
-        cin.getline(kry.jabatan, sizeof(kry.jabatan));
-        cout << " Masukkan Gaji    : ";
-        cin >> kry.gaji;
-        cin.ignore();
+    if (strcmp(kry.jabatan, "Pemilik") == 0 || strcmp(kry.jabatan, "pemilik") == 0 || 
+        strcmp(kry.jabatan, "Supervisor") == 0 || strcmp(kry.jabatan, "supervisor") == 0 || 
+        strcmp(kry.jabatan, "Staff") == 0 || strcmp(kry.jabatan, "staff") == 0 || 
+        strcmp(kry.jabatan, "Manager") == 0 || strcmp(kry.jabatan, "manager") == 0) {
+        
+        if ((strcmp(kry.jabatan, "Pemilik") == 0 || strcmp(kry.jabatan, "pemilik") == 0) && ownerada) {
+            cout << "Pemilik hanya boleh ada 1! Masukkan jabatan lain." << endl;
+            adajabatan = 0;
+        } else {
+            if (strcmp(kry.jabatan, "Pemilik") == 0 || strcmp(kry.jabatan, "pemilik") == 0) {
+                kry.jamKerja = 0; 
+                ownerada = 1;
+            }
+            adajabatan = 1;
+        }
+    } else {
+        cout << "Masukkan jabatan yang benar." << endl;
+        adajabatan = 0;
+    }
+} while (adajabatan == 0);
 
-        sisipnode(kry.nama, kry.jabatan, kry.NIP, kry.gaji);
-        fprintf(management, "%s\n%s\n%d\n%d\n", kry.nama, kry.jabatan, kry.NIP, kry.gaji);
+        if (strcmp(kry.jabatan, "Pemilik") != 0 && strcmp(kry.jabatan, "pemilik") != 0)
+{
+    cout << "Masukkan jam kerja : ";
+    cin >> kry.jamKerja;
+    cin.ignore();
+}
+
+
+        sisipnode(kry.nama, kry.jabatan, kry.NIP, kry.jamKerja);
+        fprintf(management, "%s\n%s\n%d\n%d\n", kry.nama, kry.jabatan, kry.NIP, kry.jamKerja);
     }
 
     dataBaru = dataBaru + data;
@@ -163,7 +220,7 @@ void bacamaju()
              << "NIP : " << bantu->NIP
              << endl
              << "Jabatan: " << bantu->jabatan << endl
-             << "Gaji: " << bantu->gaji << endl;
+             << "jamKerja: " << bantu->jamKerja << endl;
         cout << endl;
         bantu = bantu->kanan;
     }
@@ -175,14 +232,16 @@ void bacamundur()
     while (bantu != NULL)
     {
         cout << "Nama : " << bantu->nama << endl
-             << "NIP : " << bantu->NIP
-             << endl
+             << "NIP : " << bantu->NIP << endl
              << "Jabatan: " << bantu->jabatan << endl
-             << "Gaji: " << bantu->gaji << endl;
+             << "jamKerja: " << bantu->jamKerja << endl;
+        int gaji = rumusgaji(bantu->jabatan, bantu->jamKerja);
+        cout << "Gaji: " << gaji << endl;
         cout << endl;
         bantu = bantu->kiri;
     }
 }
+
 
 void searchNIP()
 {
@@ -201,7 +260,7 @@ void searchNIP()
             cout << "Nama : " << bantu->nama << endl;
             cout << "NIP : " << bantu->NIP << endl;
             cout << "Jabatan: " << bantu->jabatan << endl;
-            cout << "Gaji: " << bantu->gaji << endl;
+            cout << "jamKerja: " << bantu->jamKerja << endl;
             cout << endl;
             found = true;
             break; 
@@ -236,7 +295,7 @@ void searchNama()
             cout << "Nama : " << bantu->nama << endl;
             cout << "NIP : " << bantu->NIP << endl;
             cout << "Jabatan: " << bantu->jabatan << endl;
-            cout << "Gaji: " << bantu->gaji << endl;
+            cout << "jamKerja: " << bantu->jamKerja << endl;
             cout << endl;
             found = true;
         }
@@ -295,6 +354,8 @@ void hapusnode(char namaHapus[50]) {
 
  void editData(){
     int indexEdit;
+
+    
     cout << "Edit karyawan nomor berapa? (1-" << dataBaru << ") = ";
     cin >> indexEdit;
     cin.ignore();
@@ -310,7 +371,7 @@ void hapusnode(char namaHapus[50]) {
     cout << "Nama    : " << bantu->nama << endl;
     cout << "NIP     : " << bantu->NIP << endl;
     cout << "Jabatan : " << bantu->jabatan << endl;
-    cout << "Gaji    : " << bantu->gaji << endl << endl;
+    cout << "jamKerja    : " << bantu->jamKerja << endl << endl;
 
     cout << "Masukkan data baru:\n";
     cout << "Nama    : ";
@@ -320,84 +381,80 @@ void hapusnode(char namaHapus[50]) {
     cin.ignore();
     cout << "Jabatan : ";
     cin.getline(bantu->jabatan, sizeof(bantu->jabatan));
-    cout << "Gaji    : ";
-    cin >> bantu->gaji;
+    cout << "jamKerja    : ";
+    cin >> bantu->jamKerja;
     cin.ignore();
 
     kirimfile();  // overwrite file dengan data terbaru dari linked list
 
     cout << "\nData berhasil diedit.\n";
     system("pause");
- }
-
- void sortNIP(){
+}
+    
+void sortNIP(){
     if (awal == NULL || awal->kanan == NULL)
     {
         cout << "List Kosong atau data hanya satu";
         system("pause");
         return;
     }
-    
     bool swapped;
-    karyawan *current;
-
+    
     do
     {
         swapped = false;
-        current = awal;
-
-        while (current->kanan !=NULL)
+        bantu = awal;
+    
+        while (bantu->kanan !=NULL)
         {
-            if (current->NIP > current->kanan->NIP)
+            if (bantu->NIP > bantu->kanan->NIP)
             {
-                swap(current->nama,   current->kanan->nama);
-                swap(current->NIP,   current->kanan->NIP);
-                swap(current->jabatan,   current->kanan->jabatan);
-                swap(current->gaji,   current->kanan->gaji);
+                swap(bantu->nama,   bantu->kanan->nama);
+                swap(bantu->NIP,   bantu->kanan->NIP);
+                swap(bantu->jabatan,   bantu->kanan->jabatan);
+                swap(bantu->jamKerja,   bantu->kanan->jamKerja);
                 swapped = true;
             }
-            current = current->kanan;
+            bantu = bantu->kanan;
         }
     } while (swapped);
     cout << "Berhasil diurutkan" << endl;
     kirimfile();
     bacamaju();
-}
+    }
 
-void sortNama(){
+    void sortNama(){
     if (awal == NULL || awal->kanan == NULL)
     {
         cout << "List Kosong atau data hanya satu";
         system("pause");
         return;
     }
-    
     bool swapped;
-    karyawan *current;
-
+    
     do
     {
         swapped = false;
-        current = awal;
-
-        while (current->kanan !=NULL)
+        bantu = awal;
+    
+        while (bantu->kanan !=NULL)
         {
-            if (strcmp(current->nama , current->kanan->nama) > 0)
+            if (strcmp(bantu->nama,bantu->kanan->nama)>0)
             {
-                swap(current->nama,   current->kanan->nama);
-                swap(current->NIP,   current->kanan->NIP);
-                swap(current->jabatan,   current->kanan->jabatan);
-                swap(current->gaji,   current->kanan->gaji);
+                swap(bantu->nama,   bantu->kanan->nama);
+                swap(bantu->NIP,   bantu->kanan->NIP);
+                swap(bantu->jabatan,   bantu->kanan->jabatan);
+                swap(bantu->jamKerja,   bantu->kanan->jamKerja);
                 swapped = true;
             }
-            current = current->kanan;
+            bantu = bantu->kanan;
         }
     } while (swapped);
     cout << "Berhasil diurutkan" << endl;
     kirimfile();
     bacamaju();
-}
-
+    }
+    
 int main()
 {   
     // buatlistbaru();

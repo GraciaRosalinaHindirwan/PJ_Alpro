@@ -1,12 +1,12 @@
-jokowi
-raja jawa pengawas danantara
-1
-2147483647
-jajda
-jo
+lala
+staff
+10001
+10
+teddy
+manager
+10003
 14
-1000
-joajwd
-koko
-1000
-10000
+wowo
+pemilik
+10002
+0
