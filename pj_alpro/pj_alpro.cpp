@@ -328,8 +328,75 @@ void hapusnode(char namaHapus[50]) {
 
     cout << "\nData berhasil diedit.\n";
     system("pause");
-}
+ }
+
+ void sortNIP(){
+    if (awal == NULL || awal->kanan == NULL)
+    {
+        cout << "List Kosong atau data hanya satu";
+        system("pause");
+        return;
+    }
     
+    bool swapped;
+    karyawan *current;
+
+    do
+    {
+        swapped = false;
+        current = awal;
+
+        while (current->kanan !=NULL)
+        {
+            if (current->NIP > current->kanan->NIP)
+            {
+                swap(current->nama,   current->kanan->nama);
+                swap(current->NIP,   current->kanan->NIP);
+                swap(current->jabatan,   current->kanan->jabatan);
+                swap(current->gaji,   current->kanan->gaji);
+                swapped = true;
+            }
+            current = current->kanan;
+        }
+    } while (swapped);
+    cout << "Berhasil diurutkan" << endl;
+    kirimfile();
+    bacamaju();
+}
+
+void sortNama(){
+    if (awal == NULL || awal->kanan == NULL)
+    {
+        cout << "List Kosong atau data hanya satu";
+        system("pause");
+        return;
+    }
+    
+    bool swapped;
+    karyawan *current;
+
+    do
+    {
+        swapped = false;
+        current = awal;
+
+        while (current->kanan !=NULL)
+        {
+            if (strcmp(current->nama , current->kanan->nama) > 0)
+            {
+                swap(current->nama,   current->kanan->nama);
+                swap(current->NIP,   current->kanan->NIP);
+                swap(current->jabatan,   current->kanan->jabatan);
+                swap(current->gaji,   current->kanan->gaji);
+                swapped = true;
+            }
+            current = current->kanan;
+        }
+    } while (swapped);
+    cout << "Berhasil diurutkan" << endl;
+    kirimfile();
+    bacamaju();
+}
 
 int main()
 {   
@@ -390,9 +457,36 @@ int main()
                 break;
             }
         break;
-        
+        case 3:
+        cout << "===================" << endl;
+            cout << " Sorting Data by NIP :  " << endl;
+            cout << "===================" << endl;
+            cout << " 1. Sort by NIP     " << endl;
+            cout << " 2. Sort by Name   " << endl;
+            cout << "==================" << endl;
+            cout << "Masukkan Pilihan : ";
+            cin >> pilih;
+
+            switch (pilih)
+            {
+            case 1:
+                cout << "=======================" << endl;
+                cout << "     Sorting by NIP    " << endl;
+                cout << "=======================" << endl;
+                sortNIP();
+                break;
+
+            case 2:
+                cout << "=======================" << endl;
+                cout << "     Sorting by Name   " << endl;
+                cout << "=======================" << endl;
+                sortNama();
+            break;
+
+        break;
+
         case 4:
-        cout << "==================" << endl;
+            cout << "==================" << endl;
             cout << " Searching Data by:  " << endl;
             cout << "==================" << endl;
             cout << " 1. Nama    " << endl;
@@ -429,60 +523,9 @@ int main()
             break;
         }
 
-        // if (menu == 1)
-        // {
-        //     input();
-        // }
-        // if (menu == 2)
-        // {
-        //     system("cls");
-        //     cout << "===================" << endl;
-        //     cout << " Sort Data by NIP :  " << endl;
-        //     cout << "===================" << endl;
-        //     cout << " 1. Ascending     " << endl;
-        //     cout << " 2. Descending    " << endl;
-        //     cout << "==================" << endl;
-        //     cout << "Masukkan Pilihan : ";
-        //     cin >> pilih;
-
-        //     if (pilih == 1)
-        //     {
-        //         cout << "=======================" << endl;
-        //         cout << " Data secara Ascending " << endl;
-        //         cout << "=======================" << endl;
-        //         bacamaju();
-        //     }
-        //     if (pilih == 2)
-        //     {
-        //         cout << "=======================" << endl;
-        //         cout << " Data secara Descending " << endl;
-        //         cout << "=======================" << endl;
-        //         bacamundur();
-        //     }
-        // }
-        // if (menu == 3)
-        // {
-        //     cout << "==================" << endl;
-        //     cout << " Searching Data by:  " << endl;
-        //     cout << "==================" << endl;
-        //     cout << " 1. Nama    " << endl;
-        //     cout << " 2. NIP   " << endl;
-        //     cout << "=======================" << endl;
-        //     cout << "Masukkan Pilihan : ";
-        //     cin >> pilih;
-
-        //     if (pilih == 1)
-        //     {
-        //         searchNama();
-        //     }
-        //     if (pilih == 2)
-        //     {
-        //         searchNIP();
-        //     }
-        // }
-
         cout << "Kembali ke Menu?(y/n) ";
         cin >> ulang;
 
-    } while (ulang == 'y');
+        } 
+    }while (ulang == 'y');
 }
