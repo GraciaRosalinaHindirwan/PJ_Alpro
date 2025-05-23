@@ -1,0 +1,16 @@
+algo
+pemilik
+10001
+0
+bebe
+staff
+10004
+8
+bigo
+manager
+10003
+8
+bobo
+staff
+10002
+8
