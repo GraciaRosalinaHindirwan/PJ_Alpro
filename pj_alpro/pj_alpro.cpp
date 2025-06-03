@@ -648,7 +648,7 @@ int main()
     string nama, username, password; // Mendeklarasikan penggunaan string untuk akun
     int kesempatan = 3;
     system("cls");
-    cout << "Selamat datang di Aplikasi Manajemen Karyawan!\nSilahkan login terlebih dahulu.\n";
+    cout << "Selamat datang di Aplikasi GuGeomen!\nSilahkan login terlebih dahulu.\n";
     cout << "=============================\n";
     do
     {
