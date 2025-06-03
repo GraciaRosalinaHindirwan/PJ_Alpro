@@ -70,13 +70,13 @@ int rumusgaji(char jabatan[50], int jamKerja) // Fungsi hitung gaji perbulan
 int prioritasJabatan(char jabatan[50]) // Fungsi menentukan prioritas jabatan dari urutan nilai angka
 {
     if (strcmp(jabatan, "Pemilik") == 0 || strcmp(jabatan, "pemilik") == 0)
-        return 1;
-    if (strcmp(jabatan, "Manager") == 0 || strcmp(jabatan, "manager") == 0)
-        return 2;
-    if (strcmp(jabatan, "Supervisor") == 0 || strcmp(jabatan, "supervisor") == 0)
-        return 3;
-    if (strcmp(jabatan, "Staff") == 0 || strcmp(jabatan, "staff") == 0)
         return 4;
+    if (strcmp(jabatan, "Manager") == 0 || strcmp(jabatan, "manager") == 0)
+        return 3;
+    if (strcmp(jabatan, "Supervisor") == 0 || strcmp(jabatan, "supervisor") == 0)
+        return 2;
+    if (strcmp(jabatan, "Staff") == 0 || strcmp(jabatan, "staff") == 0)
+        return 1;
 }
 
 void sisipnode(char namaBaru[50], char jabatanBaru[50], int NIPBaru, int jamKerjaBaru) // Fungsi sisip node linked-list

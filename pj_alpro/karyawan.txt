@@ -1,16 +1,16 @@
-algo
+andhika guntur
 pemilik
-10001
+101
 0
-bebe
-staff
-10004
+andhika guntur ramadan
+supervisor
+103
 8
-bigo
+guntur ramadan
 manager
-10003
-8
-bobo
-staff
-10002
-8
+102
+7
+gracia 
+supervisor
+104
+7
